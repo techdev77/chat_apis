@@ -2,8 +2,10 @@ const connectDB= require('./connections/database.connection');
 const { ExpressLoader } = require('./connections/express.connection');
 // const { MiddlewareLoader } = require('./connections/middleware.connection');
 const { Config } = require('./configs/config');
-
-
+const express = require("express");
+const moment = require('moment');
+const fs = require('fs').promises;
+const path = require('path');
 
 
 
@@ -34,14 +36,21 @@ const connectedUsers = {};
 io.on('connection', (socket) => {
 
   console.log('A user connected');
-  console.log(socket);
+  // console.log(socket);
   socket.on('disconnect', () => {
     console.log('User disconnected');
     const userId = connectedUsers[socket.id];
     io.to('someRoom').emit('offline event', userId);
   });
 
-  socket.on('chat message', async (msg) => {
+  socket.on('chat message',async (msg) => {
+    console.log(msg.media);
+       if(msg.media!=null && msg.media!=''){
+         msg.media= await getFile(msg.media);
+       }
+   
+   
+    console.log(msg.media);
     const response = await AuthRepository.sendMessageBySocket(msg);
     io.to(msg.receiver_id).emit('chat message', response);
     io.emit('chat message', response);
@@ -64,6 +73,32 @@ io.on('connection', (socket) => {
     // Notify everyone in 'someRoom' that this user is online
     io.to('someRoom').emit('offline event', userId);
 });
+
+
+
+async function getFile(message) {
+
+const now = moment(); // Current date and time
+  const buffer = Buffer.from(message);
+   let chatImage="CHAT_"+now.valueOf()+".png";
+  // Specify the output path for the PNG file
+  const outputPath = path.join(__dirname, `./storage/images/${chatImage}`); // Adjust the path as needed
+
+  try {
+
+    // Write the buffer to a file
+    await fs.writeFile(outputPath, buffer);
+    
+    // Log success and return the filename
+    console.log('PNG file saved successfully:', outputPath);
+    return outputPath.split('/').pop(); // or path.basename(outputPath)
+  } catch (err) {
+    // return '';
+    console.error('Error writing file:', err);
+    return '';
+  }
+}
+
 
 });
 

@@ -10,7 +10,8 @@ router.post('/login',upload.fields([]), passwordUserSchema,awaitHandlerFactory(a
 router.post('/sendMessage',upload.fields([]),awaitHandlerFactory(authController.sendMessage)); 
 router.post('/getUsersWithLastChat',upload.fields([]),awaitHandlerFactory(authController.getUsersWithLastChat)); 
 router.post('/getChat',upload.fields([]),awaitHandlerFactory(authController.getChat)); 
-router.get('/test',(req,res)=>{      //  This route is just for testing 
+router.get('/test',(req,res)=>{ 
+    console.log(req.query);     //  This route is just for testing 
     res.send("ok");               
 }); 
 
