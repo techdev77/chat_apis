@@ -1,0 +1,11 @@
+{
+    "tag": "UNNAMED_TAG",
+    "message": "This is a log message",
+    "type": "INFO",
+    "data": "",
+    "timeStamp": "2024-10-21 13:22:54",
+    "lineNo": "    at Server.<anonymous> (/Users/macpro/Documents/Developement/NodeProjects/chat_apis/src/server.js:32:17)",
+    "methodName": "myMethod",
+    "className": "MyClass"
+}
+------------------------------------------------------------------------------------------------------------------------------------------------

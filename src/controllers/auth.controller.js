@@ -4,7 +4,7 @@ const AuthRepository = require('../repositories/auth.repository');
 
 class AuthController {
 
-    registerUser = async (req, res, next) => {
+     registerUser = async (req, res, next) => {
         console.log(req.email);
         checkValidation(req);
         const response = await AuthRepository.registerUser(req.body);

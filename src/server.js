@@ -2,19 +2,15 @@ const connectDB= require('./connections/database.connection');
 const { ExpressLoader } = require('./connections/express.connection');
 // const { MiddlewareLoader } = require('./connections/middleware.connection');
 const { Config } = require('./configs/config');
-const express = require("express");
 const moment = require('moment');
 const fs = require('fs').promises;
 const path = require('path');
-
-
-
-
 // // connect database
 connectDB.init();
 const { RoutesLoader } = require('./connections/route.connection');
 const AuthRepository = require('./repositories/auth.repository')
 
+ var Logger=require('./Helper/logger');
 // // load express
 const app = ExpressLoader.init();
 
@@ -28,6 +24,14 @@ RoutesLoader.initRoutes(app, version);
 
 const server = require('http').createServer();
 const io = require('socket.io')(app.listen(4000,()=>{
+// Example usage
+const logPath = path.join(__dirname, './storage/logs/ex.txt'); // Adjust path as needed
+Logger.logType = 'INFO';
+Logger.className = 'MyClass';
+Logger.methodName = 'MyClass::myMethod';
+Logger.lineNo = new Error().stack.split('\n')[1];;
+Logger.message = 'This is a log message';
+Logger.print(logPath);
 
 }))
 
